@@ -29,7 +29,7 @@ public class CoffeeMakerTest {
 
 	private CoffeeMaker coffeeMaker;
 	private Inventory inventory;
-	private Recipe espresso, mocha, macchiato, americano;
+	private Recipe espresso, mocha, macchiato, americano, double_espresso, better_double, hot_water;
 
 	@Before
 	public void setUp() throws ContextException {
@@ -40,7 +40,7 @@ public class CoffeeMakerTest {
 		espresso.setName("espresso");
 		espresso.setPrice(50);
 		espresso.setAmtCoffee(6);
-		espresso.setAmtMilk(1);
+		espresso.setAmtMilk(2);
 		espresso.setAmtSugar(1);
 		espresso.setAmtChocolate(0);
 
@@ -67,11 +67,46 @@ public class CoffeeMakerTest {
 		americano.setAmtMilk(1);
 		americano.setAmtSugar(2);
 		americano.setAmtChocolate(0);
+
+		double_espresso = new Recipe();
+		double_espresso.setName("double espresso");
+		double_espresso.setPrice(70);
+		double_espresso.setAmtCoffee(12);
+		double_espresso.setAmtMilk(4);
+		double_espresso.setAmtSugar(2);
+		double_espresso.setAmtChocolate(0);
+
+		better_double = new Recipe();
+		better_double.setName("better espresso");
+		better_double.setPrice(70);
+		better_double.setAmtCoffee(12);
+		better_double.setAmtMilk(4);
+		better_double.setAmtSugar(0);
+		better_double.setAmtChocolate(0);
+
+		coffeeMaker.addRecipe(double_espresso);
 	}
 
 	@Test
 	public void testAddRecipe() {
 		assertTrue(coffeeMaker.addRecipe(espresso));
+		assertTrue(!coffeeMaker.addRecipe(espresso));
+	}
+
+	@Test
+	public void testDeleteRecipe(){
+		assertTrue(!coffeeMaker.deleteRecipe(null));
+		assertTrue(coffeeMaker.deleteRecipe(double_espresso));
+		//if recipe was really removed, you can add it again
+		assertTrue(coffeeMaker.addRecipe(double_espresso));
+//		assertTrue(coffeeMaker.deleteRecipe(better_double));
+
+
+	}
+
+	@Test
+	public void testEditRecipe(){
+		assertTrue(coffeeMaker.editRecipe(double_espresso, better_double));
 	}
 
 	@Test
@@ -81,7 +116,18 @@ public class CoffeeMakerTest {
 
 	@Test
 	public void testContextMilk() throws ContextException {
-		assertTrue(espresso.getAmtMilk() == 1);
+		assertTrue(espresso.getAmtMilk() == 2);
+	}
+
+	@Test
+	public void testAddInventory(){
+		assertTrue(coffeeMaker.addInventory(1,1,1,1));
+		assertTrue(!coffeeMaker.addInventory(1,1,1,-1));
+	}
+
+	@Test
+	public void checkInventory(){
+		assertEquals(coffeeMaker.checkInventory().getCoffee(), inventory.getCoffee());
 	}
 
 	@Test

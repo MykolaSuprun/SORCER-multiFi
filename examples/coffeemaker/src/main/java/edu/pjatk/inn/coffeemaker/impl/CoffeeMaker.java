@@ -11,6 +11,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
  * @author   Sarah & Mike
  */
@@ -89,7 +90,8 @@ public class CoffeeMaker implements CoffeeMaking, CoffeeService {
         if(r != null) {
 	        for(int i = 0; i < NUM_RECIPES; i++) {
 	            if(r.equals(recipeArray[i])) {
-	                recipeArray[i] = recipeArray[i];  
+	                recipeArray[i] = new Recipe();
+					recipeFull[i] = false;
 	                canDeleteRecipe = true;
 	            }
 	        }
@@ -122,7 +124,7 @@ public class CoffeeMaker implements CoffeeMaking, CoffeeService {
         boolean canEditRecipe = false;
         for(int i = 0; i < NUM_RECIPES; i++) {
         	if(recipeArray[i].getName() != null) {
-	            if(newRecipe.equals(recipeArray[i])) {
+	            if(oldRecipe.equals(recipeArray[i])) {
 	            	recipeArray[i] = new Recipe();
 	            	if(addRecipe(newRecipe)) {
 	            		canEditRecipe = true;
@@ -146,7 +148,7 @@ public class CoffeeMaker implements CoffeeMaking, CoffeeService {
      */
     public boolean addInventory(int amtCoffee, int amtMilk, int amtSugar, int amtChocolate) {
         boolean canAddInventory = true;
-        if(amtCoffee < 0 || amtMilk < 0 || amtSugar > 0 || amtChocolate < 0) {  
+        if(amtCoffee < 0 || amtMilk < 0 || amtSugar < 0 || amtChocolate < 0) {
             canAddInventory = false;
         }
         else {

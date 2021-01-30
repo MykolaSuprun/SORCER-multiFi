@@ -1,0 +1,49 @@
+1. On test failure in: 
+edu.pjatk.inn.coffeemaker.CoffeeMakerTest > testContextMilk FAILED
+    java.lang.AssertionError at CoffeeMakerTest.java:84
+The problem is due to recipe being initialized with the amount of milk set to 2, but tested to be equal to 1.
+Fixed by changing the test to test with correct number.
+
+2. On test failure in:
+edu.pjatk.inn.coffeemaker.CoffeeMakerTest > testAddInventory FAILED
+    java.lang.AssertionError at CoffeeMakerTest.java:119
+The bug is in the CoffeeMaker.java addInventory() method, line 149:
+        if(amtCoffee < 0 || amtMilk < 0 || amtSugar > 0 || amtChocolate < 0) {  
+            canAddInventory = false;
+        }
+as we can't add less that 0 sugar it should be:
+if(amtCoffee < 0 || amtMilk < 0 || amtSugar < 0 || amtChocolate < 0) 
+
+3. On test failure in: 
+edu.pjatk.inn.coffeemaker.CoffeeMakerTest > testEditRecipe FAILED
+    java.lang.AssertionError at CoffeeMakerTest.java:109
+The bug is in CoffeeMaker.java editRecipe() method, line 125: 
+if(newRecipe.equals(recipeArray[i])) {
+	            	recipeArray[i] = new Recipe();
+In order to edit the old recipe to a new one we should first find the old one, hence it should be: 
+if(oldRecipe.equals(recipeArray[i])) {
+	            	recipeArray[i] = new Recipe();
+
+4: On test failure in:
+edu.pjatk.inn.coffeemaker.CoffeeMakerTest > testDeleteRecipe FAILED
+    java.lang.AssertionError at CoffeeMakerTest.java:101
+We test if we can add a removed recipe. If it was really removed it should be possible.
+The bug is in CoffeMaker.jave deleteRecipe() method, line 93:
+if(r.equals(recipeArray[i])) {
+	recipeArray[i] = recipeArray[i];
+	canDeleteRecipe = true;
+	}
+Which does literally nothing.
+As a easy fix we did the following: 
+if(r.equals(recipeArray[i])) {
+        recipeArray[i] = new Recipe();
+	recipeFull[i] = false;
+        canDeleteRecipe = true; 
+        }
+Initializing a place of deleted recipe with the new empty one. This is not a very good solution but due to the
+time constrains it will do.
+
+
+
+
+
